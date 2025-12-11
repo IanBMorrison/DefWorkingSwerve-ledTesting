@@ -95,11 +95,9 @@ public class LED extends SubsystemBase {
 
     @Override
     public void periodic() {
-
-        updateBuffer();
         io.periodic();
         updateState();
-
+        updateBuffer();
         tick++;
     }
 }
