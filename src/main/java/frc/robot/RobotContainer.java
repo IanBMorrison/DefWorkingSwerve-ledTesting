@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.led.LED;
 import frc.robot.subsystems.swervedrive.Leds;
+import frc.robot.subsystems.swervedrive.PhotoelectricSensor;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -35,13 +35,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer
 {
-  private final Leds leds= new Leds(1);
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+  private final PhotoelectricSensor sensor = new PhotoelectricSensor(0);
+  private final Leds leds = new Leds(1, sensor);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */

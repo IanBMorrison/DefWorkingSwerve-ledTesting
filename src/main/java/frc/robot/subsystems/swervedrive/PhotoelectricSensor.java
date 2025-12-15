@@ -11,20 +11,20 @@ public class PhotoelectricSensor extends SubsystemBase {
     private final AnalogInput photoelectricSensor;
     private static int onCount = 0;
     
-        public PhotoelectricSensor(int pin) {
-            photoelectricSensor = new AnalogInput(0);
-        }
+    public PhotoelectricSensor(int pin) {
+        photoelectricSensor = new AnalogInput(pin);
+    }
     
-        @Override
-        public void periodic() {
-            if (photoelectricSensor.getVoltage() < VOLTAGE_THRESHOLD) {
-            onCount++;
-            }
-            else onCount = 0;
+    @Override
+    public void periodic() {
+        if (photoelectricSensor.getVoltage() < VOLTAGE_THRESHOLD) {
+        onCount++;
         }
+        else onCount = 0;
+    }
     
-        public boolean isTripped() {      
-            boolean isitTripped = onCount >= SAMPLING_WINDOW;
+    public boolean isTripped() {      
+        boolean isitTripped = onCount >= SAMPLING_WINDOW;
         return isitTripped;
     }
 

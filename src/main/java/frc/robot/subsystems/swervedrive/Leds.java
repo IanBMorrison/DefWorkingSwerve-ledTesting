@@ -10,8 +10,9 @@ public class Leds extends SubsystemBase {
     private final Spark m_Led;
     private final PhotoelectricSensor sensor;
 
-    public Leds(int ledPin) {
+    public Leds(int ledPin, PhotoelectricSensor sensor) {
         this.m_Led = new Spark(ledPin);
+        this.sensor = sensor;
     }
     public void setGreen() {
         m_Led.set(0.77);
@@ -34,6 +35,7 @@ public class Leds extends SubsystemBase {
     public void turnOff() {
         m_Led.set(0.0);
     }
+    @Override
     public void periodic(){
         if (sensor.isTripped()){
             setRed();
