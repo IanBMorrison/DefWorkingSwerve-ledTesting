@@ -23,7 +23,7 @@ public class PhotoelectricSensor extends SubsystemBase {
             else onCount = 0;
         }
     
-        public static boolean isTripped() {      
+        public boolean isTripped() {      
             boolean isitTripped = onCount >= SAMPLING_WINDOW;
         return isitTripped;
     }
