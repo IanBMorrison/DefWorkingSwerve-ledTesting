@@ -35,12 +35,15 @@ public class Leds extends SubsystemBase {
     public void turnOff() {
         m_Led.set(0.0);
     }
+    public void setRainbow(){
+        m_Led.set(-0.99);
+    }
     @Override
     public void periodic(){
         if (sensor.isTripped()){
             setRed();
         }else if(DriverStation.isDisabled()){
-            setYellow();
+            setRainbow();
         }else{
             setGreen();
         }
