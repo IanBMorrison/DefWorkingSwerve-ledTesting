@@ -175,7 +175,7 @@ public class RobotContainer
     } else
     {
       
-      // driverXbox.b().whileTrue(drivebase.centerModulesCommand());
+      //driverXbox.b().whileTrue(drivebase.centerModulesCommand());
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
@@ -202,7 +202,7 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     String SelectedAuto = m_chooser.getSelected();
-    return drivebase.getAutonomousCommand("Test");
+    return drivebase.getAutonomousCommand("Spin_FDBW");
   }
 
   public void setMotorBrake(boolean brake)
