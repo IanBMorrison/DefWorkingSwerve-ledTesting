@@ -17,7 +17,7 @@ def estamater(int tagcout, double accuracy){
   double xyStdDev = 0.5 + ambiguity * 2.0;
   double thetaStdDev = Math.toRadians(5 + ambiguity * 20);
   if (limelightMeasurement != null && limelightMeasurement.tagCount > 0 && limelightMeasurement.avgTagAmbiguity < 0.2){
-      if (limelightMeasurement.tagCount > 0){
+      if (limelightMeasurement.tagCount == 1){
         m_poseEstimator.setVisionMeasurementStdDevs(
             VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
         );
@@ -28,7 +28,7 @@ def estamater(int tagcout, double accuracy){
         // put Led change
       }
 
-      if (limelightMeasurement.tagCount > 0){
+      if (limelightMeasurement.tagCount > 1){
           m_poseEstimator.setVisionMeasurementStdDevs(
               VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
           );
