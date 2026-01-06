@@ -1,46 +1,31 @@
-public void periodic() {
-  Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 
-  def estamater(int tagcout, double accuracy){
+public class LimelightSubsystem extends SubsystemBase {
 
-    LimelightHelpers.setPipelineIndex("", 9);
+    private static final String LIMELIGHT_NAME = "limelight";
+    public void Liams_brain() {
+      Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
 
-    double robotYaw = -m_gyro.getYaw();  
-    LimelightHelpers.SetRobotOrientation("", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+      def estamater(int tagcout, double accuracy){
 
-    // Get the pose estimate
-    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+        LimelightHelpers.setPipelineIndex("", 9);
 
-  // Add it to your pose estimator
-    if (limelightMeasurement == null){
-      return;
-    }
-    double ambiguity = limelightMeasurement.avgTagAmbiguity;
-    double xyStdDev = 0.5 + ambiguity * 2.0;
-    double thetaStdDev = Math.toRadians(5 + ambiguity * 20);
-    if (limelightMeasurement != null && limelightMeasurement.tagCount > 0 && limelightMeasurement.avgTagAmbiguity < 0.2){
-        if (limelightMeasurement.tagCount == 1){
-          m_poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
-          );
-          m_poseEstimator.addVisionMeasurement(
-              limelightMeasurement.pose,
-              limelightMeasurement.timestampSeconds
-          );
-          LimelightHelpers.setLEDMode_ForceBlink("");
+        double robotYaw = -m_gyro.getYaw();  
+        LimelightHelpers.SetRobotOrientation("", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+
+  
+        if (limelightMeasurement == null){
+          return;
         }
-
-        if (limelightMeasurement.tagCount > 1){
-            m_poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
-            );
-            m_poseEstimator.addVisionMeasurement(
-                limelightMeasurement.pose,
-                limelightMeasurement.timestampSeconds
-            );
-            LimelightHelpers.setLEDMode_ForceOn("");
-      }
-      if (limelightMeasurement.tagCount == 0){
+        double ambiguity = limelightMeasurement.avgTagAmbiguity;
+        double xyStdDev = 0.5 + ambiguity * 2.0;
+        double thetaStdDev = Math.toRadians(5 + ambiguity * 20);
+        if (limelightMeasurement != null && limelightMeasurement.tagCount > 0 && limelightMeasurement.avgTagAmbiguity < 0.2){
+            if (limelightMeasurement.tagCount == 1){
               m_poseEstimator.setVisionMeasurementStdDevs(
                   VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
               );
@@ -48,7 +33,30 @@ public void periodic() {
                   limelightMeasurement.pose,
                   limelightMeasurement.timestampSeconds
               );
-              LimelightHelpers.setLEDMode_ForceOff("");
-      }
+              LimelightHelpers.setLEDMode_ForceBlink("");
+            }
+
+            if (limelightMeasurement.tagCount > 1){
+                m_poseEstimator.setVisionMeasurementStdDevs(
+                    VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
+                );
+                m_poseEstimator.addVisionMeasurement(
+                    limelightMeasurement.pose,
+                    limelightMeasurement.timestampSeconds
+                );
+                LimelightHelpers.setLEDMode_ForceOn("");
+            }
+            if (limelightMeasurement.tagCount == 0){
+                  m_poseEstimator.setVisionMeasurementStdDevs(
+                      VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
+                  );
+                  m_poseEstimator.addVisionMeasurement(
+                    limelightMeasurement.pose,
+                    limelightMeasurement.timestampSeconds
+                  );
+                  LimelightHelpers.setLEDMode_ForceOff("");
+            }
+        }
+    }
   }
 }
