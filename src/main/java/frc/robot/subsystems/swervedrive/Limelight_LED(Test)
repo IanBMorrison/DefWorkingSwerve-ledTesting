@@ -1,35 +1,30 @@
-LimelightHelpers.setPipelineIndex("", 9);
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 
-if (limelightMeasurement != null && limelightMeasurement.tagCount > 0 && limelightMeasurement.avgTagAmbiguity < 0.2){
-      if (limelightMeasurement.tagCount == 1){
-        m_poseEstimator.setVisionMeasurementStdDevs(
-            VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
-        );
-        m_poseEstimator.addVisionMeasurement(
-            limelightMeasurement.pose,
-            limelightMeasurement.timestampSeconds
-        );
-        LimelightHelpers.setLEDMode_ForceBlink("");
-      }
+public class LimelightSubsystem extends SubsystemBase {
 
-      if (limelightMeasurement.tagCount > 1){
-          m_poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
-          );
-          m_poseEstimator.addVisionMeasurement(
-              limelightMeasurement.pose,
-              limelightMeasurement.timestampSeconds
-          );
-        LimelightHelpers.setLEDMode_ForceOn("");
-      }
-      if (limelightMeasurement.tagCount == 0){
-            m_poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
-            );
-            m_poseEstimator.addVisionMeasurement(
-                limelightMeasurement.pose,
-                limelightMeasurement.timestampSeconds
-            );
-          LimelightHelpers.setLEDMode_ForceOff("");
-      }
-  }
+    private static final String LIMELIGHT_NAME = "limelight";
+
+    @Override
+    public void periodic() {
+        // Get latest Limelight results
+        LimelightHelpers.LimelightResults results =
+                LimelightHelpers.getLatestResults(LIMELIGHT_NAME);
+
+        // Check if any AprilTag (fiducial) is detected
+        boolean seesAprilTag =
+                results != null &&
+                results.targets_Fiducials != null &&
+                results.targets_Fiducials.length > 0;
+
+        if (seesAprilTag) {
+            // Blink LEDs when an AprilTag is detected
+            LimelightHelpers.setLEDMode_ForceBlink(LIMELIGHT_NAME);
+        } else {
+            // Turn LEDs off when no AprilTag is seen
+            LimelightHelpers.setLEDMode_ForceOff(LIMELIGHT_NAME);
+            // OR use pipeline control instead:
+            // LimelightHelpers.setLEDMode_PipelineControl(LIMELIGHT_NAME);
+        }
+    }
+}
