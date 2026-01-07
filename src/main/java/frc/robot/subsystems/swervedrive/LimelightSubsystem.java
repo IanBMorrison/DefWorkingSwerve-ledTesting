@@ -8,6 +8,9 @@ import frc.robot.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
 
+    private final PhotoelectricSensor sensor = new PhotoelectricSensor(0);
+    private final Leds leds = new Leds(1, sensor);
+
     private static final String LIMELIGHT_NAME = "limelight";
 
     private final SwerveDrivePoseEstimator m_poseEstimator;
@@ -58,6 +61,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
         if (est.tagCount > 1) {
             LimelightHelpers.setLEDMode_ForceOn(LIMELIGHT_NAME);
+            leds.setOrange();
         } else if (est.tagCount ) {
             LimelightHelpers.setLEDMode_ForceBlink(LIMELIGHT_NAME);
         } else {
