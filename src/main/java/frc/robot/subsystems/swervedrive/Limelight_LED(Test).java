@@ -20,7 +20,7 @@ public class Limelight_LED_Test extends SubsystemBase {
 
         if (seesAprilTag) {
             LimelightHelpers.setLEDMode_ForceBlink("");
-            setOrange()
+            setOrange();
         } else {
             LimelightHelpers.setLEDMode_ForceOff("");
         }
