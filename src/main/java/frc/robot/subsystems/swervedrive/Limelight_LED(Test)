@@ -3,25 +3,20 @@ import frc.robot.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-    public void test_blink_LED() {
-        // Get latest Limelight results (default Limelight)
+    @Override
+    public void periodic() {
         LimelightHelpers.LimelightResults results =
                 LimelightHelpers.getLatestResults("");
 
-        // Check if any AprilTag (fiducial) is detected
         boolean seesAprilTag =
                 results != null &&
                 results.targets_Fiducials != null &&
                 results.targets_Fiducials.length > 0;
 
         if (seesAprilTag) {
-            // Blink LEDs when an AprilTag is detected
             LimelightHelpers.setLEDMode_ForceBlink("");
         } else {
-            // Turn LEDs off when no AprilTag is detected
             LimelightHelpers.setLEDMode_ForceOff("");
-            // OR:
-            // LimelightHelpers.setLEDMode_PipelineControl("");
         }
     }
 }
