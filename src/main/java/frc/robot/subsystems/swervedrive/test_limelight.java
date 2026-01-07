@@ -42,10 +42,9 @@ public class LimelightSubsystem extends SubsystemBase {
             return;
         }
 
-        double xyStdDev = est.tagCount > 1 ? 0.3 : 0.8;
-        double thetaStdDev = est.tagCount > 1
-            ? Math.toRadians(5)
-            : Math.toRadians(15);
+        double ambiguity = limelightMeasurement.avgTagAmbiguity;
+        double xyStdDev = 0.5 + ambiguity * 2.0;
+        double thetaStdDev = Math.toRadians(5 + ambiguity * 20);
 
         m_poseEstimator.setVisionMeasurementStdDevs(
             VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
