@@ -17,8 +17,8 @@ public class LimelightSubsystem extends SubsystemBase {
         m_gyro = gyro;
     }
 
-    
-    public void updat_vision() {
+    @Override
+    public void periodic() {
         updateVisionEstimate();
     }
 
