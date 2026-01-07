@@ -1,6 +1,5 @@
 package frc.robot.subsystems.swervedrive;
 
-import frc.robot.subsystems.Leds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 
@@ -20,7 +19,6 @@ public class Limelight_LED_Test extends SubsystemBase {
 
         if (seesAprilTag) {
             LimelightHelpers.setLEDMode_ForceBlink("");
-            setOrange();
         } else {
             LimelightHelpers.setLEDMode_ForceOff("");
         }
