@@ -1,51 +1,69 @@
-public class TestLimelight {
+package frc.robot.subsystems;
 
-    public void updateVision() {
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 
-        // Pipeline + LEDs
-        LimelightHelpers.setPipelineIndex("", 0);
-        LimelightHelpers.setLEDMode_PipelineControl("");
+public class LimelightSubsystem extends SubsystemBase {
 
-        // Send robot orientation to Limelight
-        double robotYaw = m_gyro.getRotation2d().getDegrees();
+    private static final String LIMELIGHT_NAME = "limelight";
+
+    private final SwerveDrivePoseEstimator m_poseEstimator;
+    private final Gyro m_gyro;
+
+    public LimelightSubsystem(SwerveDrivePoseEstimator poseEstimator, Gyro gyro) {
+        m_poseEstimator = poseEstimator;
+        m_gyro = gyro;
+    }
+
+    
+    public void updat_vision() {
+        updateVisionEstimate();
+    }
+
+    private void updateVisionEstimate() {
+
+        LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 9);
+
+        double robotYaw = -m_gyro.getYaw();
         LimelightHelpers.SetRobotOrientation(
-            "", robotYaw,
-            0.0, 0.0,    // pitch, roll
-            0.0, 0.0, 0.0
+            LIMELIGHT_NAME,
+            robotYaw,
+            0, 0,
+            0, 0, 0
         );
 
-        // Get MegaTag2 pose estimate (FIELD RELATIVE)
-        LimelightHelpers.PoseEstimate llMeasurement =
-            LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+        LimelightHelpers.PoseEstimate est =
+            LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME);
 
-        // ❗ DO NOTHING if no tags
-        if (llMeasurement.tagCount == 0) {
-            LimelightHelpers.setLEDMode_ForceOff("");
+        if (est == null || est.tagCount == 0 || est.avgTagAmbiguity > 0.2) {
+            LimelightHelpers.setLEDMode_ForceOff(LIMELIGHT_NAME);
             return;
         }
 
-        // Convert Pose3d → Pose2d
-        Pose2d visionPose = llMeasurement.pose.toPose2d();
+        double xyStdDev = est.tagCount > 1 ? 0.3 : 0.8;
+        double thetaStdDev = est.tagCount > 1
+            ? Math.toRadians(5)
+            : Math.toRadians(15);
 
-        // Adjust trust based on tag count
-        if (llMeasurement.tagCount >= 2) {
-            // High confidence
-            m_poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(0.5, 0.5, 9999999)
-            );
-            LimelightHelpers.setLEDMode_ForceOn("");
-        } else { // tagCount == 1
-            // Lower confidence
-            m_poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(1.2, 1.2, 9999999)
-            );
-            LimelightHelpers.setLEDMode_ForceBlink("");
-        }
-
-        // Add vision measurement
-        m_poseEstimator.addVisionMeasurement(
-            visionPose,
-            llMeasurement.timestampSeconds
+        m_poseEstimator.setVisionMeasurementStdDevs(
+            VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
         );
+
+        m_poseEstimator.addVisionMeasurement(
+            est.pose,
+            est.timestampSeconds
+        );
+
+        if (est.tagCount > 1) {
+            LimelightHelpers.setLEDMode_ForceOn(LIMELIGHT_NAME);
+        } else {
+            LimelightHelpers.setLEDMode_ForceBlink(LIMELIGHT_NAME);
+        }
+    }
+
+    public Pose2d getCurrentPose() {
+        return m_poseEstimator.getEstimatedPosition();
     }
 }
