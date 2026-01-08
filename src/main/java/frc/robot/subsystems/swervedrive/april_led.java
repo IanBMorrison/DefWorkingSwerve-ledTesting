@@ -18,7 +18,7 @@ public class Limelight_LED_Test extends SubsystemBase {
                 results.targets_Fiducials.length > 0;
 
         if (seesAprilTag) {
-            LimelightHelpers.setLEDMode_ForceBlink("");
+            LimelightHelpers.setLEDMode_ForceOn("");
         } else {
             LimelightHelpers.setLEDMode_ForceOff("");
         }
