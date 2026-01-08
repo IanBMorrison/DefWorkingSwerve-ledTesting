@@ -62,10 +62,11 @@ public class LimelightSubsystem extends SubsystemBase {
         if (est.tagCount > 1) {
             LimelightHelpers.setLEDMode_ForceOn(LIMELIGHT_NAME);
             leds.setOrange();
-        } else if (est.tagCount ) {
+        } else if (est.tagCount == 1) {
             LimelightHelpers.setLEDMode_ForceBlink(LIMELIGHT_NAME);
         } else {
             LimelightHelpers.setLEDMode_ForceOff(LIMELIGHT_NAME);
+            leds.setGreen();
         }
     }
 
